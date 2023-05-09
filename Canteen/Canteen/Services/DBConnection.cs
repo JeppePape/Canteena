@@ -5,7 +5,7 @@ namespace Canteen.Services
 {
     public class DBConnection
     {
-        private const string connectionString = "mongodb://localhost:27017";
+        private const string connectionString = "mongodb://root:example@localhost:27017";
         private const string databaseName = "Canteen";
 
         private MongoClient client;

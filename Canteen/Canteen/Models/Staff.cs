@@ -7,6 +7,7 @@ namespace Canteen.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         public int StaffID { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }

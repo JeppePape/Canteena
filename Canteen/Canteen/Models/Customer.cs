@@ -7,6 +7,7 @@ namespace Canteen.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         public string? AUID { get; set; }
     }
 
