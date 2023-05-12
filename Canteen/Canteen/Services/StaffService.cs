@@ -8,6 +8,8 @@ namespace Canteen.Services
         DBConnection db;
         private IMongoCollection<Staff> Collection;
         private const string StaffCollection = "Staff";
+       
+
         public StaffService(DBConnection db)
         {
             this.db = db;
@@ -24,5 +26,14 @@ namespace Canteen.Services
             var database = db.GetDatabase();
             database.DropCollection(StaffCollection);
         }
+        public List<Staff> GetStaffByCanteenName(string canteenName)
+        { 
+        var filter = Builders<Staff>.Filter.Eq(x => x.CanteenName, canteenName);
+            var result = Collection.Find(filter).ToList();
+            return result;
+        }
+
+
+
     }
 }

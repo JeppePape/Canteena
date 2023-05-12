@@ -1,5 +1,6 @@
 ﻿using Canteen.Models;
 using Canteen.Services;
+using System;
 using System.Diagnostics;
 
 namespace Canteen
@@ -52,14 +53,43 @@ namespace Canteen
             {
                 case '1':
                     // Vores første query
+                    var _staffmembers = _staff.GetStaffByCanteenName("Canteen 1");
+                    foreach (var staff in _staffmembers)
+                    {
+                        Console.WriteLine(staff.Name);
+                    }
                     break;
 
                 case '2':
-                    // Vores anden query
+                    Console.WriteLine("Enter the canteen name:");
+                    var canteenName = Console.ReadLine();
+
+                    var menus = _menu.GetMenuByCanteenName(canteenName);
+                    foreach (var menu in menus)
+                    {
+                        Console.WriteLine("Street Foods:");
+                        foreach (var sf in menu.streetFoods)
+                        {
+                            Console.WriteLine(sf.Name);
+                        }
+                        Console.WriteLine("Warm Dishes:");
+                        foreach (var wd in menu.warmDishes)
+                        {
+                            Console.WriteLine(wd.Name);
+                        }
+                    }
+                    break;
+
+
                     break;
 
                 case '3':
-                    // Vores tredje query
+                   // Vores tredje query
+                   var _optionMenus = _menu.GetMenuByCanteenName("Canteen 1");
+                    foreach (var option in _optionMenus)
+                    {
+                        Console.WriteLine(option);
+                    }
                     break;
                 case '4':
                     // Vores fjerde query
@@ -217,6 +247,49 @@ namespace Canteen
                 MealName = "Gulash"
             };
             _reservation.CreateReservation(reservation1); _reservation.CreateReservation(reservation2); _reservation.CreateReservation(reservation3); _reservation.CreateReservation(reservation4);
+
+
+            //Seeding Menu data 
+            var streetFood1 = new StreetFood
+            {
+                Name = "Burger"
+            };
+
+            var streetFood2 = new StreetFood
+            {
+                Name = "Taco"
+            };
+
+            var warDish1 = new WarmDish
+            {
+                Name = "Lasagna"
+            };
+
+            var warDish2 = new WarmDish
+            {
+                Name = "Chicken Curry"
+            };
+            //_menu.CreateMenu(streetFood1); _menu.CreateMenu(streetFood1); _menu.CreateMenu(warDish1);_menu.CreateMenu(warDish2);
+
+            var reservationMenu1 = new ReservationMenu()
+            {
+                CanteenName = "Canteen 1",
+                streetFoods = new List<StreetFood> { },
+                warmDishes = new List<WarmDish> { },
+            };
+            var reservationMenu2 = new ReservationMenu()
+            {
+                CanteenName = "Canteen 2",
+                streetFoods = new List<StreetFood> { },
+                warmDishes = new List<WarmDish> { },
+            };
+
+            reservationMenu1.streetFoods.Add(streetFood1); reservationMenu2.streetFoods.Add(streetFood2);
+
+            reservationMenu1.warmDishes.Add(warDish1);reservationMenu2.warmDishes.Add(warDish2);
+
+            _menu.CreateMenu(reservationMenu1); _menu.CreateMenu(reservationMenu2);
+
         }
     }
 }
