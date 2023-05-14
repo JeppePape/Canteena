@@ -7,7 +7,7 @@ namespace Canteen
 {
     public class program
     {
-
+        
         public static DBConnection db = new DBConnection();
         public static CanteenService _canteen = new CanteenService(db);
         public static CustomerService _customer = new CustomerService(db);
@@ -16,6 +16,7 @@ namespace Canteen
         public static ReservationService _reservation = new ReservationService(db);
         //public static ReservationlistService _reservationlist = new ReservationlistService(db);
         public static StaffService _staff = new StaffService(db);
+        public static CancelService _cancel = new CancelService(db);
 
         static void Main(string[] args)
         {
@@ -110,6 +111,16 @@ namespace Canteen
                 case '4':
                     // Query 4: For a canteen given as input, show the the available
                     // (canceled) daily menu in the nearby canteens (E.g. For Kgl. Bibliotek):
+
+                    Console.WriteLine("Enter the canteen name:");
+                    var canteenNamse = Console.ReadLine();
+
+                    var canceledMeals = _cancel.GetCanceledMealsExceptCanteen(canteenNamse);
+                    Console.WriteLine("Canceled Meals:");
+                    foreach (var meal in canceledMeals)
+                    {
+                        Console.WriteLine($"{meal.CanceledMealsName}\t{meal.CanteenName}");
+                    }
 
 
                     break;
@@ -335,9 +346,23 @@ namespace Canteen
             _menu.CreateMenu(reservationMenu1); _menu.CreateMenu(reservationMenu2);
 
 
+            var canceledmeal1 = new CanceledMeals()
+            {
+                CanteenName = "Canteen 1",
+                CanceledMealsName = "Pizza",
+            };
+            var canceledmeal2 = new CanceledMeals()
+            {
+                CanteenName = "Canteen 2",
+                CanceledMealsName = "Spaghet",
+            };
+            var canceledmeal3 = new CanceledMeals()
+            {
+                CanteenName = "Canteen 3",
+                CanceledMealsName = "Pasta",
+            };
 
-
-
+            _cancel.CreateCancel(canceledmeal1); _cancel.CreateCancel(canceledmeal2); _cancel.CreateCancel(canceledmeal3);
         }
     }
 }
