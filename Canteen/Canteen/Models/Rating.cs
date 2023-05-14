@@ -9,7 +9,7 @@ namespace Canteen.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
         public int RatingId { get; set; }
-        public int Rating { get; set; }
+        public float Rating { get; set; }
         public string CanteenName { get; set; }
 
         public string? AUID { get; set; }

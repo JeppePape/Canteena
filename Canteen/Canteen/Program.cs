@@ -108,7 +108,7 @@ namespace Canteen
                     break;
 
                 case '4':
-                    // Query 5: For a canteen given as input, show the the available
+                    // Query 4: For a canteen given as input, show the the available
                     // (canceled) daily menu in the nearby canteens (E.g. For Kgl. Bibliotek):
 
 
@@ -116,7 +116,14 @@ namespace Canteen
                 case '5':
                     //Query 5: Show the average ratings from all the canteens from top to bottom (E.g.)
 
+                    var canteenRatings = _rating.GetCanteenRatings();
+                    Console.WriteLine("Name\tAvg Rating");
+                    foreach (var canteen in canteenRatings)
+                    {
+                        Console.WriteLine($"{canteen.CanteenName}\t{canteen.AvgRating}");
+                    }
                     break;
+
                 case '6':
                     // Query 6 : For a canteen given as input, show the payroll of its staff members (E.g.: For Kgl. Bibliotek):
                     Console.WriteLine("Enter the canteen name:");
@@ -211,6 +218,8 @@ namespace Canteen
             };
             _staff.CreateStaff(staff1); _staff.CreateStaff(staff2); _staff.CreateStaff(staff3); _staff.CreateStaff(staff4);
 
+            //seeding Ratings 
+
             Ratings rating1 = new Ratings()
             {
                 Rating = 4,
@@ -219,13 +228,13 @@ namespace Canteen
             };
             Ratings rating2 = new Ratings()
             {
-                Rating = 3,
+                Rating = (int)2.3,
                 CanteenName = "Canteen 2",
                 AUID = "000069"
             };
             Ratings rating3 = new Ratings()
             {
-                Rating = 2,
+                Rating = (int)2.2,
                 CanteenName = "Canteen 3",
                 AUID = "001337"
             };
@@ -237,7 +246,7 @@ namespace Canteen
             };
             Ratings rating5 = new Ratings()
             {
-                Rating = 3,
+                Rating = (int)3.3,
                 CanteenName = "Canteen 2",
                 AUID = "000069"
             };
@@ -249,6 +258,8 @@ namespace Canteen
             };
             _rating.CreateRating(rating1); _rating.CreateRating(rating2); _rating.CreateRating(rating3); _rating.CreateRating(rating4); _rating.CreateRating(rating5); _rating.CreateRating(rating6);
 
+
+            //seeding reservations 
             Reservation reservation1 = new Reservation()
             {
                 ReservationId = 1,
