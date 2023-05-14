@@ -14,11 +14,13 @@ namespace Canteen
         public static MenuService _menu = new MenuService(db);
         public static RatingService _rating = new RatingService(db);
         public static ReservationService _reservation = new ReservationService(db);
-        public static ReservationlistService _reservationlist = new ReservationlistService(db);
+        //public static ReservationlistService _reservationlist = new ReservationlistService(db);
         public static StaffService _staff = new StaffService(db);
 
         static void Main(string[] args)
         {
+
+
             Console.WriteLine("Påbegynd Handin 3");
             Console.WriteLine("\n" + "Smid hele databasen og reseed data Y/N ?)");
             ConsoleKeyInfo cki1 = Console.ReadKey();
@@ -30,10 +32,10 @@ namespace Canteen
 
             while (true)
             {
-                Console.WriteLine("\n" + "Vis Query 1(1) Query 2(2), Query 3(3), Query 4(4), Query 5(5)");
+                Console.WriteLine("\n" + "Vis Query 1(1) Query 2(2), Query 3(3), Query 4(4), Query 5(5) , Query 6(6)");
                 ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
                 if (consoleKeyInfo.KeyChar == '1' || consoleKeyInfo.KeyChar == '2' || consoleKeyInfo.KeyChar == '3' ||
-                    consoleKeyInfo.KeyChar == '4' || consoleKeyInfo.KeyChar == '5')
+                    consoleKeyInfo.KeyChar == '4' || consoleKeyInfo.KeyChar == '5' || consoleKeyInfo.KeyChar == '6')
                 {
                     Console.WriteLine();
                     ChooseQuery(consoleKeyInfo.KeyChar);
@@ -52,15 +54,7 @@ namespace Canteen
             switch (c)
             {
                 case '1':
-                    // Vores første query
-                    var _staffmembers = _staff.GetStaffByCanteenName("Canteen 1");
-                    foreach (var staff in _staffmembers)
-                    {
-                        Console.WriteLine(staff.Name);
-                    }
-                    break;
-
-                case '2':
+                    //Query 1: get the menu options for a given canteen
                     Console.WriteLine("Enter the canteen name:");
                     var canteenName = Console.ReadLine();
 
@@ -80,23 +74,61 @@ namespace Canteen
                     }
                     break;
 
+                case '2':
+                    //Query 2 : Get the reservation for a given user  AUID
 
+                    Console.WriteLine("Enter Your AUID:");
+                    var AUID = Console.ReadLine();
+                    var reservationslist = _reservation.GetReservationsByAUID(AUID);
+                    Console.WriteLine("Meal Id\tName\tCanteen Name");
+                    foreach (var reservation in reservationslist)
+                    {
+                        Console.WriteLine($"{reservation.ReservationId}\t{reservation.MealName}\t{reservation.CanteenName}");
+                    }
                     break;
 
                 case '3':
-                   // Vores tredje query
-                   var _optionMenus = _menu.GetMenuByCanteenName("Canteen 1");
-                    foreach (var option in _optionMenus)
+                    //Query 3 : For a canteen given as input, show the number of reservations for each of the daily menu options (E.g. For Kgl. Bibliotek):   
+
+                    Console.WriteLine("Enter the CanteenName :");
+                    var CanteenName = Console.ReadLine();
+
+                    var reservations = _reservation.GetReservationCountByCanteen(CanteenName);
+
+                    var mealCounts = reservations
+                        .GroupBy(r => r.MealName)
+                        .Select(g => new { Name = g.Key, Amount = g.Count() });
+
+                    Console.WriteLine($"Reservations for {CanteenName}:");
+                    Console.WriteLine("Name\t\tAmount");
+                    foreach (var mealCount in mealCounts)
                     {
-                        Console.WriteLine(option);
+                        Console.WriteLine($"{mealCount.Name}\t\t{mealCount.Amount}");
                     }
                     break;
+
                 case '4':
-                    // Vores fjerde query
+                    // Query 5: For a canteen given as input, show the the available
+                    // (canceled) daily menu in the nearby canteens (E.g. For Kgl. Bibliotek):
+
+
                     break;
                 case '5':
-                    // Vores femte query
+                    //Query 5: Show the average ratings from all the canteens from top to bottom (E.g.)
+
                     break;
+                case '6':
+                    // Query 6 : For a canteen given as input, show the payroll of its staff members (E.g.: For Kgl. Bibliotek):
+                    Console.WriteLine("Enter the canteen name:");
+                    var canteenNames = Console.ReadLine();
+                    var _staffmembers = _staff.GetStaffByCanteenName(canteenNames);
+                    Console.WriteLine("StaffID\t\tName\t\tSalary\t\tTitle");
+                    foreach (var staff in _staffmembers)
+                    {
+                        Console.WriteLine("{0,-15}\t{1,-10}\t{2,-15}\t{3}", staff.StaffID, staff.Name, staff.Title, staff.Salary);
+                    }
+                    break;
+
             }
         }
 
@@ -106,7 +138,6 @@ namespace Canteen
             _customer.DropCollection();
             _menu.DropCollection();
             _rating.DropCollection();
-            _reservationlist.DropCollection();
             _reservation.DropCollection();
             _staff.DropCollection();
 
@@ -149,7 +180,7 @@ namespace Canteen
             Staff staff1 = new Staff()
             {
                 StaffID = 4,
-                Name ="Jens B.",
+                Name = "Jens B.",
                 Title = "Cook",
                 Salary = 30700,
                 CanteenName = "Canteen 1"
@@ -249,6 +280,8 @@ namespace Canteen
             _reservation.CreateReservation(reservation1); _reservation.CreateReservation(reservation2); _reservation.CreateReservation(reservation3); _reservation.CreateReservation(reservation4);
 
 
+
+
             //Seeding Menu data 
             var streetFood1 = new StreetFood
             {
@@ -286,9 +319,13 @@ namespace Canteen
 
             reservationMenu1.streetFoods.Add(streetFood1); reservationMenu2.streetFoods.Add(streetFood2);
 
-            reservationMenu1.warmDishes.Add(warDish1);reservationMenu2.warmDishes.Add(warDish2);
+            reservationMenu1.warmDishes.Add(warDish1); reservationMenu2.warmDishes.Add(warDish2);
 
             _menu.CreateMenu(reservationMenu1); _menu.CreateMenu(reservationMenu2);
+
+
+
+
 
         }
     }
