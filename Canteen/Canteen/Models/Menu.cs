@@ -16,7 +16,6 @@ namespace Canteen.Models
         public List <WarmDish> warmDishes { get; set; }
 
         public string? CanteenName { get; set; }
-      
     }
 
     public class StreetFood
@@ -34,8 +33,13 @@ namespace Canteen.Models
 
     public class CanceledMeals
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
         [BsonElement("CanceledName")]
         public string? CanceledMealsName { get; set; }
+        public string? CanteenName { get; set; }
 
     }
 }

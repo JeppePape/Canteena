@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Driver;
 
 namespace Canteen.Services
 {
@@ -11,7 +12,7 @@ namespace Canteen.Services
     {
         private DBConnection db;
         private readonly IMongoCollection<CanceledMeals> Collection;
-        private const string CancelCollection = "Canteen";
+        private const string CancelCollection = "Cancel";
 
 
 
